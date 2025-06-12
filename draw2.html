@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+
+        var canvas = document.createElement('canvas');
+
+        canvas.width = w;
+        canvas.height = h;
+
+        canvas.id = "canvas";
+
+        document.body.appendChild(canvas);
+
+        canvas.style.backgroundColor = "black";
+        document.body.style.backgroundColor = "black";
+
+        var ctx = canvas.getContext('2d');
+
+        var point = function(x,y,z,w,h,rgb) {this.x=x;this.y=y;this.z=z;this.w=w;this.h=h;this.rgb=rgb;}
+
+        var fov = 400;
+
+        var zLimit = 600;
+
+        let p = new point(w/2, h/2);
+
+        let arr = []
+
+        for(let i =0; i<100; i++) {
+            arr.push(new point(Math.random() * w, Math.random() * h, 100,1,1,`rgb(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255}`));
+        }
+
+        function draw(x,y,col,rad, n) {
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = col;
+
+            ctx.beginPath();
+
+            
+            for(let i =0; i<360; i+=n) {
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + Math.cos(Math.PI / 180 * i) * rad, y + Math.sin(Math.PI / 180 * i) * rad);
+            }
+            ctx.stroke();
+        }
+
+        function render(now) {
+            ctx.clearRect(0,0,w,h);
+            now *= 0.01;
+            ctx.fillStyle = "white";
+
+            for(let i =0; i<arr.length; i++) {
+                draw(arr[i].x, arr[i].y, arr[i].rgb, now, 13);
+            }
+           
+           requestAnimationFrame(render);
+        }
+
+        requestAnimationFrame(render);
+    </script>
+</body>
+</html>
