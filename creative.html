@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+
+        var canvas = document.createElement('canvas');
+
+        canvas.width = w;
+        canvas.height = h;
+
+        canvas.id = "canvas";
+
+        document.body.appendChild(canvas);
+
+        canvas.style.backgroundColor = "black";
+        document.body.style.backgroundColor = "black";
+
+        var ctx = canvas.getContext('2d');
+
+        var point = function(x,y,z,w,h,rgb) {this.x=x;this.y=y;this.z=z;this.w=w;this.h=h;this.rgb=rgb;}
+
+        var fov = 400;
+
+        var zLimit = 600;
+
+        let p = new point(w/2, h/2);
+
+
+        function draw(x, y, angleOfArc, angle, radius, lineWidth,strokeStyle, fillStyle, fill) {
+            ctx.lineWidth = lineWidth;
+            ctx.strokeStyle = strokeStyle;
+            ctx.fillStyle = fillStyle;
+
+            ctx.beginPath();
+            for(let i =0; i<=angleOfArc; i++) {
+                let cos = Math.cos(Math.PI / angle * i) * radius;
+                let sin = Math.sin(Math.PI / angle * i) * radius;
+
+
+                i === 0 ? ctx.moveTo(x + cos, y + sin) : ctx.lineTo(x + cos, y + sin);
+            }
+            ctx.stroke();
+            ctx.fill();
+        }
+
+        function render() {
+            ctx.clearRect(0,0,w,h);
+
+            for(let i =-100; i<100; i+=20) {
+                for(let j =-100; j<100; j+=20) {
+                draw(p.x + i, p.y + j, 360, 10, Math.random() * 10, 2, `rgb(0,0,${Math.random() * 255})`, `rgb(${Math.random() * 255}, 0, 0)`, Math.random() * 100);
+            }
+           // p.x += 0.01;
+        }
+            
+           requestAnimationFrame(render);
+        }
+
+        requestAnimationFrame(render);
+    </script>
+</body>
+</html>
